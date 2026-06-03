@@ -491,9 +491,15 @@ async function getMedianIncome(zip) {
 async function geocodeAddress(address) {
   if (geocodeCache[address]) return geocodeCache[address];
   try {
-    await new Promise(r => setTimeout(r, 1100));
+    await new Promise(r => setTimeout(r, 1200));
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 8000);
     const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=1&countrycodes=us`;
-    const res = await fetch(url, { headers: { 'Accept-Language': 'en' } });
+    const res = await fetch(url, { 
+      headers: { 'Accept-Language': 'en', 'User-Agent': 'SmileCrewDashboard/1.0' },
+      signal: controller.signal
+    });
+    clearTimeout(timeout);
     const data = await res.json();
     if (data && data[0]) {
       const coords = [parseFloat(data[0].lat), parseFloat(data[0].lon)];
@@ -501,7 +507,9 @@ async function geocodeAddress(address) {
       localStorage.setItem('geocodeCache', JSON.stringify(geocodeCache));
       return coords;
     }
-  } catch(e) {}
+  } catch(e) {
+    console.warn('Geocode failed for:', address, e.message);
+  }
   return null;
 }
 
@@ -684,12 +692,17 @@ async function loadData() {
 
     for (let i = 0; i < patients.length; i++) {
       const p = patients[i];
-      progressEl.textContent = `Geocoding ${i + 1} of ${patients.length}: ${p.patientId}`;
-      // Force geocoding to Michigan only
-      const fullAddress = `${p.address}, Michigan, USA`;
-      p.coords = await geocodeAddress(fullAddress);
-      const zip = extractZip(p.address);
-      if (zip) p.income = await getMedianIncome(zip);
+      try {
+        progressEl.textContent = `Geocoding ${i + 1} of ${patients.length}: ${p.patientId}`;
+        // Force geocoding to Michigan only
+        const fullAddress = `${p.address}, Michigan, USA`;
+        p.coords = await geocodeAddress(fullAddress);
+        const zip = extractZip(p.address);
+        if (zip) p.income = await getMedianIncome(zip);
+      } catch(err) {
+        console.warn(`Skipping patient ${p.patientId}:`, err.message);
+        p.coords = null;
+      }
     }
 
     allPatients = patients;
