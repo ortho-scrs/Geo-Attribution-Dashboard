@@ -399,7 +399,7 @@
     <div class="stat-value green" id="stat-dismissed">—</div>
   </div>
   <div class="stat-card">
-    <div class="stat-label">Avg Distance</div>
+    <div class="stat-label">Median Distance</div>
     <div class="stat-value blue" id="stat-distance">—</div>
   </div>
   <div class="stat-card">
@@ -547,7 +547,7 @@ function renderPatients(patients) {
   const showNoShow = document.getElementById('toggle-noshow').checked;
   const showDismissed = document.getElementById('toggle-dismissed').checked;
 
-  let noshoCount = 0, dismissCount = 0, totalDist = 0, distCount = 0;
+  let noshoCount = 0, dismissCount = 0, totalDist = 0, distCount = 0, distances = [];
 
   patients.forEach(p => {
     if (!p.coords) return;
@@ -559,7 +559,7 @@ function renderPatients(patients) {
 
     const color = isNoShow ? '#ef4444' : '#22c55e';
     const dist = haversineDistance(p.coords[0], p.coords[1], CLINIC_COORDS[0], CLINIC_COORDS[1]);
-    totalDist += dist; distCount++;
+    distances.push(dist); totalDist += dist; distCount++;
     if (isNoShow) noshoCount++; else dismissCount++;
 
     // Dotted line
@@ -608,7 +608,13 @@ function renderPatients(patients) {
   // Update stats
   document.getElementById('stat-noshows').textContent = noshoCount;
   document.getElementById('stat-dismissed').textContent = dismissCount;
-  document.getElementById('stat-distance').textContent = distCount > 0 ? `${(totalDist/distCount).toFixed(1)} mi` : '—';
+  // Calculate median distance
+  const medianDist = distCount > 0 ? (() => {
+    const sorted = distances.sort((a, b) => a - b);
+    const mid = Math.floor(sorted.length / 2);
+    return sorted.length % 2 !== 0 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+  })() : 0;
+  document.getElementById('stat-distance').textContent = distCount > 0 ? `${medianDist.toFixed(1)} mi` : '—';
   document.getElementById('stat-period').textContent = getPeriodLabel(currentPeriod);
 }
 
