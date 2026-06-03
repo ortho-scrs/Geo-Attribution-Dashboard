@@ -184,7 +184,7 @@
 
 <div id="loading-overlay">
   <div class="spinner"></div>
-  <div class="loading-text">Loading patient data...</div>
+  <div class="loading-text">Loading dashboard...</div>
   <div class="loading-progress" id="loading-progress"></div>
 </div>
 
@@ -262,7 +262,7 @@ const CLINIC_ADDR = '7250 Dixie Hwy Ste 300, Independence Township, MI 48346';
 
 let map, allPatients = [], currentPeriod = 'monthly';
 let noShowLayers = [], dismissedLayers = [];
-let geocodeCache = JSON.parse(localStorage.getItem('geocodeCache') || '{}');
+// Coordinates now come pre-geocoded from Master Sheet columns H and I
 
 // Init map
 map = L.map('map', { center: CLINIC_COORDS, zoom: 10, zoomControl: true });
@@ -286,27 +286,7 @@ function haversineDistance(lat1, lon1, lat2, lon2) {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 }
 
-async function geocodeAddress(address) {
-  if (geocodeCache[address]) return geocodeCache[address];
-  try {
-    await new Promise(r => setTimeout(r, 1200));
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 8000);
-    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=1&countrycodes=us`;
-    const res = await fetch(url, { headers: { 'Accept-Language': 'en' }, signal: controller.signal });
-    clearTimeout(timeout);
-    const data = await res.json();
-    if (data && data[0]) {
-      const coords = [parseFloat(data[0].lat), parseFloat(data[0].lon)];
-      geocodeCache[address] = coords;
-      localStorage.setItem('geocodeCache', JSON.stringify(geocodeCache));
-      return coords;
-    }
-  } catch(e) {
-    console.warn('Geocode failed for:', address);
-  }
-  return null;
-}
+// Geocoding handled server-side in Apps Script
 
 function filterByPeriod(patients, period) {
   const now = new Date();
@@ -446,23 +426,22 @@ async function loadData() {
         patientId: vals[4] || '',
         address: vals[5] || '',
         sheetName: vals[6] || '',
+        lat: vals[7] || '',
+        lng: vals[8] || '',
         coords: null
       };
     }).filter(p => p.address && p.patientId && (p.status === 'No-Show' || p.status === 'Dismissed'));
 
     console.log('Patients after filter:', patients.length);
 
-    for (let i = 0; i < patients.length; i++) {
-      const p = patients[i];
-      progressEl.textContent = `Geocoding ${i+1} of ${patients.length}: ${p.patientId}`;
-      try {
-        const fullAddress = `${p.address}, Michigan, USA`;
-        p.coords = await geocodeAddress(fullAddress);
-      } catch(e) {
-        console.warn('Geocode error for', p.patientId);
+    // Coordinates already in CSV columns H and I — no geocoding needed
+    patients.forEach(p => {
+      if (p.lat && p.lng && !isNaN(p.lat) && !isNaN(p.lng)) {
+        p.coords = [parseFloat(p.lat), parseFloat(p.lng)];
+      } else {
         p.coords = null;
       }
-    }
+    });
 
     allPatients = patients;
     overlay.style.display = 'none';
