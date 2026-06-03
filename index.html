@@ -638,13 +638,17 @@ async function loadData() {
       };
     }).filter(p => p.address && p.patientId && (p.status === 'No-Show' || p.status === 'Dismissed'));
 
+    console.log('Total rows loaded from CSV:', rows.length);
+    console.log('Rows after filter:', patients.length);
+    console.log('Sample statuses:', rows.slice(0,5).map(r => Object.values(r)[2]));
+
     progressEl.textContent = `Geocoding ${patients.length} addresses...`;
 
     for (let i = 0; i < patients.length; i++) {
       const p = patients[i];
       progressEl.textContent = `Geocoding ${i + 1} of ${patients.length}: ${p.patientId}`;
-      // Append Column B (location/metro) to anchor geocoding to correct city
-      const fullAddress = p.location ? `${p.address}, ${p.location}` : p.address;
+      // Force geocoding to Michigan only
+      const fullAddress = `${p.address}, Michigan, USA`;
       p.coords = await geocodeAddress(fullAddress);
       const zip = extractZip(p.address);
       if (zip) p.income = await getMedianIncome(zip);
