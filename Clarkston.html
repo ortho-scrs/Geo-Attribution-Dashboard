@@ -488,19 +488,13 @@ function renderPatients(patients) {
   document.getElementById('stat-period').textContent = getPeriodLabel(currentPeriod);
 }
 
-function extractZipFromAddress(address) {
-  const match = address.match(/(\d{5})(?:-\d{4})?/);
-  return match ? match[1] : null;
-}
-
 function renderTables(patients) {
   const filtered = filterByPeriod(patients, currentPeriod);
   const noShowZips = {};
   const dismissedZips = {};
 
   filtered.forEach(p => {
-    const zip = extractZipFromAddress(p.address);
-    if (!zip) return;
+    const zip = p.zip || 'Unknown';
     const income = p.income ? '$' + parseInt(p.income).toLocaleString() : 'N/A';
     if (p.status === 'No-Show') {
       if (!noShowZips[zip]) noShowZips[zip] = { count: 0, income };
@@ -582,6 +576,7 @@ async function loadData() {
         lat: vals[7] || '',
         lng: vals[8] || '',
         income: vals[9] || '',
+        zip: vals[10] || '',
         coords: null
       };
     }).filter(p => p.address && p.patientId && (p.status === 'No-Show' || p.status === 'Dismissed'));
