@@ -6,14 +6,16 @@
 <title>SmileCrew Dashboards</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Segoe UI', sans-serif; background: #080c14; color: #e2e8f0; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; gap: 24px; }
+  body { font-family: 'Segoe UI', sans-serif; background: #080c14; color: #e2e8f0; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; gap: 24px; padding: 40px 20px; }
   h1 { font-size: 24px; font-weight: 800; letter-spacing: 0.05em; }
+  h2.section-title { font-size: 24px; font-weight: 800; letter-spacing: 0.05em; color: #94a3b8; }
   .cards { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
   .card { background: #0e1520; border: 1px solid #1e2d42; border-radius: 12px; padding: 32px 40px; text-align: center; text-decoration: none; color: #e2e8f0; transition: all 0.2s; }
   .card:hover { border-color: #0ea5e9; transform: translateY(-2px); }
+  .card.coming-soon { opacity: 0.5; cursor: default; pointer-events: none; }
   .card .icon { font-size: 36px; margin-bottom: 12px; }
-  .card h2 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
-  .card p { font-size: 13px; color: #64748b; }
+  .card h3 { font-size: 18px; font-weight: 700; }
+  .divider { width: 100%; max-width: 600px; border: none; border-top: 1px solid #1e2d42; }
 </style>
 </head>
 <body>
@@ -21,14 +23,30 @@
   <div class="cards">
     <a class="card" href="Clarkston.html">
       <div class="icon">📍</div>
-      <h2>Clarkston, MI</h2>
-      <p>West Detroit Metro Area, MI</p>
+      <h3>Clarkston, MI</h3>
     </a>
     <a class="card" href="Buda.html">
       <div class="icon">📍</div>
-      <h2>Buda, TX</h2>
-      <p>South Metro Austin Area, TX</p>
+      <h3>Buda, TX</h3>
     </a>
+    <a class="card" href="Leander.html">
+      <div class="icon">📍</div>
+      <h3>Leander, TX</h3>
+    </a>
+  </div>
+
+  <hr class="divider">
+
+  <h2 class="section-title">⭐ Rising Stars Dashboards</h2>
+  <div class="cards">
+    <div class="card coming-soon">
+      <div class="icon">📍</div>
+      <h3>Lakeline</h3>
+    </div>
+    <div class="card coming-soon">
+      <div class="icon">📍</div>
+      <h3>Marble Falls</h3>
+    </div>
   </div>
 </body>
 </html>
