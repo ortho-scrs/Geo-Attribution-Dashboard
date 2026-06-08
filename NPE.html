@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NPE Sources Attribution</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root{
+  --bg:#080c14;--surface:#0e1520;--surface2:#151e2e;--border:#1e2d42;
+  --accent:#0ea5e9;--accent2:#38bdf8;--text:#ffffff;
+  --text-muted:#64748b;--text-dim:#94a3b8;
+  --c-buda:#3b82f6;--c-leander:#f59e0b;--c-marble:#22c55e;
+  --c-lakeline:#06b6d4;--c-clarkston:#a855f7;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{font-family:"Syne",sans-serif;background:var(--bg);color:var(--text);display:flex;flex-direction:column;min-height:100vh;}
+
+/* HEADER */
+header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;gap:16px;}
+.brand{display:flex;align-items:center;gap:12px;cursor:pointer;flex-shrink:0;}
+.brand-icon{width:36px;height:36px;background:linear-gradient(135deg,#facc15,#f59e0b);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;}
+.brand-text h1{font-size:16px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:#fff;}
+.brand-text small{font-size:11px;color:var(--text-muted);font-family:"DM Mono",monospace;}
+.header-right{display:flex;align-items:center;gap:12px;flex-shrink:0;}
+.filter-group{display:flex;background:var(--bg);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+.filter-group button{background:transparent;border:none;color:var(--text-muted);padding:8px 13px;font-family:"Syne",sans-serif;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;transition:all .2s;border-right:1px solid var(--border);}
+.filter-group button:last-child{border-right:none;}
+.filter-group button:hover:not(.active){background:var(--surface2);color:#fff;}
+.filter-group button.pf-active{background:#0ea5e9;color:#fff;}
+.filter-group button.active-all{background:#334155;color:#fff;}
+.filter-group button.active-buda{background:var(--c-buda);color:#fff;}
+.filter-group button.active-leander{background:var(--c-leander);color:#fff;}
+.filter-group button.active-marble{background:var(--c-marble);color:#fff;}
+.filter-group button.active-lakeline{background:var(--c-lakeline);color:#fff;}
+.filter-group button.active-clarkston{background:var(--c-clarkston);color:#fff;}
+
+/* MAIN */
+.main{flex:1;padding:24px;display:flex;flex-direction:column;gap:24px;overflow-y:auto;}
+
+/* SECTION HEADERS */
+.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.section-title{font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#fff;font-family:"DM Mono",monospace;display:flex;align-items:center;gap:10px;}
+.coming-soon-pill{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:4px;background:rgba(245,158,11,.15);color:#fbbf24;border:1px solid rgba(245,158,11,.3);}
+.live-pill{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:3px 10px;border-radius:4px;background:rgba(34,197,94,.15);color:#4ade80;border:1px solid rgba(34,197,94,.3);}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;}
+.card-head{font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#fff;font-family:"DM Mono",monospace;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;}
+
+/* COMING SOON OVERLAY */
+.coming-soon-wrap{position:relative;}
+.coming-soon-overlay{position:absolute;inset:0;background:rgba(8,12,20,.75);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;z-index:10;backdrop-filter:blur(2px);}
+.coming-soon-overlay .icon{font-size:40px;}
+.coming-soon-overlay h3{font-size:20px;font-weight:800;color:#fff;letter-spacing:.04em;}
+.coming-soon-overlay p{font-size:12px;color:var(--text-muted);font-family:"DM Mono",monospace;text-align:center;max-width:280px;line-height:1.6;}
+
+/* PIE CHART SECTION */
+.pie-section{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+.pie-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:20px;display:flex;flex-direction:column;align-items:center;gap:16px;}
+.pie-card-title{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);font-family:"DM Mono",monospace;text-align:center;}
+.pie-wrap{width:180px;height:180px;position:relative;}
+.pie-legend{width:100%;display:flex;flex-direction:column;gap:6px;}
+.legend-row{display:flex;align-items:center;justify-content:space-between;font-size:11px;font-family:"DM Mono",monospace;}
+.legend-label{display:flex;align-items:center;gap:6px;color:var(--text-dim);}
+.legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.legend-pct{color:#fff;font-weight:700;}
+
+/* NO SHOW SECTION */
+.noshow-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.source-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:16px 20px;}
+.source-card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
+.source-name{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#fff;font-family:"DM Mono",monospace;}
+.source-count{font-size:22px;font-weight:800;color:var(--accent2);}
+.source-bar-wrap{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:8px;}
+.source-bar{height:100%;border-radius:3px;background:var(--accent);}
+.source-meta{font-size:11px;color:var(--text-muted);font-family:"DM Mono",monospace;}
+
+/* COMING SOON PLACEHOLDER SOURCES */
+.placeholder-sources{display:flex;flex-direction:column;gap:8px;width:100%;}
+.placeholder-row{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--bg);border-radius:6px;border:1px solid var(--border);}
+.placeholder-label{font-size:12px;font-family:"DM Mono",monospace;color:var(--text-muted);}
+.placeholder-pct{font-size:12px;font-family:"DM Mono",monospace;color:var(--text-dim);font-weight:700;}
+
+/* COMING SOON INPUT AREA */
+.input-section{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:12px;}
+.input-label{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);font-family:"DM Mono",monospace;}
+.input-row{display:flex;gap:12px;flex-wrap:wrap;}
+.input-field{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:8px 12px;font-family:"DM Mono",monospace;font-size:12px;color:#fff;outline:none;flex:1;min-width:160px;}
+.input-field::placeholder{color:var(--text-muted);}
+.input-field:focus{border-color:var(--accent);}
+.add-btn{background:var(--accent);border:none;border-radius:6px;padding:8px 16px;font-family:"Syne",sans-serif;font-size:12px;font-weight:700;color:#fff;cursor:pointer;letter-spacing:.06em;text-transform:uppercase;transition:opacity .2s;}
+.add-btn:hover{opacity:.85;}
+.noshow-table-wrap{overflow-x:auto;}
+.noshow-table{width:100%;border-collapse:collapse;font-size:12px;}
+.noshow-table th{padding:10px 16px;text-align:left;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#fff;font-family:"DM Mono",monospace;background:var(--bg);white-space:nowrap;border-bottom:1px solid var(--border);}
+.noshow-table td{padding:10px 16px;border-bottom:1px solid var(--border);font-family:"DM Mono",monospace;color:var(--text-dim);white-space:nowrap;}
+.noshow-table tr:last-child td{border-bottom:none;}
+.noshow-table tr:hover td{background:var(--bg);}
+.del-btn{background:rgba(239,68,68,.15);border:none;border-radius:4px;padding:3px 8px;color:#f87171;font-size:10px;font-weight:800;font-family:"DM Mono",monospace;cursor:pointer;letter-spacing:.06em;text-transform:uppercase;}
+.del-btn:hover{background:rgba(239,68,68,.3);}
+.pct-badge{display:inline-block;padding:3px 8px;border-radius:4px;font-size:10px;font-weight:800;background:rgba(14,165,233,.15);color:var(--accent2);}
+.empty-state{text-align:center;padding:32px;color:var(--text-muted);font-family:"DM Mono",monospace;font-size:12px;}
+.divider{border:none;border-top:1px solid var(--border);margin:8px 0;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand" onclick="window.location.href='index.html'">
+    <div class="brand-icon">🦷</div>
+    <div class="brand-text"><h1>SmileCrew</h1><small>NPE Sources Attribution</small></div>
+  </div>
+  <div class="header-right">
+    <div class="filter-group">
+      <button data-period="lastmonth" onclick="setPeriod('lastmonth')">Last Month</button>
+      <button data-period="q1" onclick="setPeriod('q1')">Q1</button>
+      <button data-period="q2" onclick="setPeriod('q2')">Q2</button>
+      <button data-period="q3" onclick="setPeriod('q3')">Q3</button>
+      <button data-period="q4" onclick="setPeriod('q4')">Q4</button>
+      <button class="pf-active" data-period="annual" onclick="setPeriod('annual')">Annual</button>
+      <button data-period="alltime" onclick="setPeriod('alltime')">All Time</button>
+    </div>
+    <div class="filter-group">
+      <button class="active-all" data-loc="all" onclick="setLoc('all')">All</button>
+      <button data-loc="clarkston" onclick="setLoc('clarkston')">Clarkston</button>
+      <button data-loc="buda" onclick="setLoc('buda')">Buda</button>
+      <button data-loc="leander" onclick="setLoc('leander')">Leander</button>
+      <button data-loc="lakeline" onclick="setLoc('lakeline')">Lakeline</button>
+      <button data-loc="marble falls" onclick="setLoc('marble falls')">Marble Falls</button>
+    </div>
+  </div>
+</header>
+
+<div class="main">
+
+  <!-- SECTION 1: ALL APPOINTMENTS BY SOURCE -->
+  <div>
+    <div class="section-head">
+      <div class="section-title">
+        📊 All Appointments by Source
+        <span class="coming-soon-pill">Coming Soon</span>
+      </div>
+    </div>
+    <div class="card coming-soon-wrap">
+      <div class="coming-soon-overlay">
+        <div class="icon">🔌</div>
+        <h3>Data Integration Pending</h3>
+        <p>Appointment source data will be connected here. Charts will populate automatically once the data pipeline is live.</p>
+      </div>
+      <!-- Placeholder pie charts (blurred behind overlay) -->
+      <div class="pie-section">
+        <div class="pie-card">
+          <div class="pie-card-title">All Locations</div>
+          <div class="pie-wrap"><canvas id="pie1"></canvas></div>
+          <div class="placeholder-sources">
+            <div class="placeholder-row"><span class="legend-label"><span class="legend-dot" style="background:#0ea5e9"></span>Google Ads</span><span class="legend-pct">34%</span></div>
+            <div class="placeholder-row"><span class="legend-label"><span class="legend-dot" style="background:#a855f7"></span>Organic Search</span><span class="legend-pct">28%</span></div>
+            <div class="placeholder-row"><span class="legend-label"><span class="legend-dot" style="background:#22c55e"></span>Referral</span><span class="legend-pct">19%</span></div>
+            <div class="placeholder-row"><span class="legend-label"><span class="legend-dot" style="background:#f59e0b"></span>Social Media</span><span class="legend-pct">12%</span></div>
+            <div class="placeholder-row"><span class="legend-label"><span class="legend-dot" style="background:#ef4444"></span>Other</span><span class="legend-pct">7%</span></div>
+          </div>
+        </div>
+        <div class="pie-card">
+          <div class="pie-card-title">New Patients</div>
+          <div class="pie-wrap"><canvas id="pie2"></canvas></div>
+          <div class="placeholder-sources">
+            <div class="placeholder-row"><span class="legend-label"><span class="legend-dot" style="background:#0ea5e9"></span>Google Ads</span><span class="legend-pct">41%</span></div>
+            <div class="placeholder-row"><span class="legend-label"><span class="legend-dot" style="background:#a855f7"></span>Organic Search</span><span class="legend-pct">22%</span></div>
+            <div class="placeholder-row"><span class="legend-label"><span class="legend-dot" style="background:#22c55e"></span>Referral</span><span class="legend-pct">18%</span></div>
+            <div class="placeholder-row"><span class="legend-label"><span class="legend-dot" style="background:#f59e0b"></span>Social Media</span><span class="legend-pct">14%</span></div>
+            <div class="placeholder-row"><span class="legend-label"><span class="legend-dot" style="background:#ef4444"></span>Other</span><span class="legend-pct">5%</span></div>
+          </div>
+        </div>
+        <div class="pie-card">
+          <div class="pie-card-title">Returning Patients</div>
+          <div class="pie-wrap"><canvas id="pie3"></canvas></div>
+          <div class="placeholder-sources">
+            <div class="placeholder-row"><span class="legend-label"><span class="legend-dot" style="background:#0ea5e9"></span>Google Ads</span><span class="legend-pct">22%</span></div>
+            <div class="placeholder-row"><span class="legend-label"><span class="legend-dot" style="background:#a855f7"></span>Organic Search</span><span class="legend-pct">35%</span></div>
+            <div class="placeholder-row"><span class="legend-label"><span class="legend-dot" style="background:#22c55e"></span>Referral</span><span class="legend-pct">24%</span></div>
+            <div class="placeholder-row"><span class="legend-label"><span class="legend-dot" style="background:#f59e0b"></span>Social Media</span><span class="legend-pct">10%</span></div>
+            <div class="placeholder-row"><span class="legend-label"><span class="legend-dot" style="background:#ef4444"></span>Other</span><span class="legend-pct">9%</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: NO-SHOW DATA BY SOURCE -->
+  <div>
+    <div class="section-head">
+      <div class="section-title">
+        🔴 No-Show Data by Source
+        <span class="live-pill">Live</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head">
+        <span>Add No-Show Source Entry</span>
+        <span id="noshow-period-label" style="color:var(--text-muted);font-size:11px;font-weight:400;letter-spacing:0;text-transform:none;font-family:'DM Mono',monospace"></span>
+      </div>
+      <div class="input-section">
+        <div class="input-label">Add Entry</div>
+        <div class="input-row">
+          <input class="input-field" id="inp-source" placeholder="Source (e.g. Google Ads)">
+          <input class="input-field" id="inp-count" placeholder="No-Show Count" type="number" min="0">
+          <input class="input-field" id="inp-total" placeholder="Total from Source" type="number" min="0">
+          <input class="input-field" id="inp-loc" placeholder="Location (e.g. Buda)">
+          <button class="add-btn" onclick="addEntry()">+ Add</button>
+        </div>
+      </div>
+      <hr class="divider">
+      <div class="noshow-table-wrap">
+        <table class="noshow-table">
+          <thead>
+            <tr>
+              <th>Source</th>
+              <th>Location</th>
+              <th>No-Shows</th>
+              <th>Total Apts</th>
+              <th>No-Show %</th>
+              <th>Period</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="noshow-tbody">
+            <tr><td colspan="7" class="empty-state">No entries yet — add your first no-show source above</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+let period='annual', loc='all';
+let entries = JSON.parse(localStorage.getItem('npe_noshow') || '[]');
+
+const PIE_COLORS=['#0ea5e9','#a855f7','#22c55e','#f59e0b','#ef4444'];
+const PIE_DATA_1=[34,28,19,12,7];
+const PIE_DATA_2=[41,22,18,14,5];
+const PIE_DATA_3=[22,35,24,10,9];
+
+function makePie(id, data){
+  const ctx=document.getElementById(id).getContext('2d');
+  new Chart(ctx,{
+    type:'doughnut',
+    data:{
+      datasets:[{data,backgroundColor:PIE_COLORS.map(c=>c+'cc'),borderColor:PIE_COLORS,borderWidth:2}]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:true,
+      cutout:'65%',
+      plugins:{legend:{display:false},tooltip:{enabled:false}}
+    }
+  });
+}
+
+function getPeriodLabel(){
+  const now=new Date();
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const lastMonth=new Date(now.getFullYear(),now.getMonth()-1,1);
+  if(period==='lastmonth')return`${months[lastMonth.getMonth()]} ${lastMonth.getFullYear()}`;
+  if(period==='q1')return`Q1 ${now.getFullYear()}`;
+  if(period==='q2')return`Q2 ${now.getFullYear()}`;
+  if(period==='q3')return`Q3 ${now.getFullYear()}`;
+  if(period==='q4')return`Q4 ${now.getFullYear()}`;
+  if(period==='annual')return`${now.getFullYear()}`;
+  return'All Time';
+}
+
+function getFiltered(){
+  return entries.filter(e=>{
+    const locMatch=loc==='all'||e.loc.toLowerCase()===loc.toLowerCase();
+    const periodMatch=e.period===period;
+    return locMatch&&periodMatch;
+  });
+}
+
+function renderTable(){
+  const tbody=document.getElementById('noshow-tbody');
+  const filtered=getFiltered();
+  document.getElementById('noshow-period-label').textContent=getPeriodLabel()+' — '+filtered.length+' entries';
+  if(!filtered.length){
+    tbody.innerHTML='<tr><td colspan="7" class="empty-state">No entries for this period and location</td></tr>';
+    return;
+  }
+  tbody.innerHTML=filtered.map((e,i)=>{
+    const pct=e.total>0?((e.count/e.total)*100).toFixed(1)+'%':'—';
+    const barW=e.total>0?Math.round((e.count/e.total)*100):0;
+    const idx=entries.indexOf(e);
+    return`<tr>
+      <td style="color:#fff;font-weight:700">${e.source}</td>
+      <td>${e.loc||'—'}</td>
+      <td style="color:#f87171;font-weight:700">${e.count}</td>
+      <td>${e.total}</td>
+      <td><span class="pct-badge">${pct}</span></td>
+      <td>${e.period==='alltime'?'All Time':e.period}</td>
+      <td><button class="del-btn" onclick="deleteEntry(${idx})">Remove</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function addEntry(){
+  const source=document.getElementById('inp-source').value.trim();
+  const count=parseInt(document.getElementById('inp-count').value);
+  const total=parseInt(document.getElementById('inp-total').value);
+  const entryLoc=document.getElementById('inp-loc').value.trim();
+  if(!source||isNaN(count)||isNaN(total)){
+    alert('Please fill in Source, No-Show Count, and Total from Source.');
+    return;
+  }
+  entries.push({source,count,total,loc:entryLoc||'All',period});
+  localStorage.setItem('npe_noshow',JSON.stringify(entries));
+  document.getElementById('inp-source').value='';
+  document.getElementById('inp-count').value='';
+  document.getElementById('inp-total').value='';
+  document.getElementById('inp-loc').value='';
+  renderTable();
+}
+
+function deleteEntry(idx){
+  entries.splice(idx,1);
+  localStorage.setItem('npe_noshow',JSON.stringify(entries));
+  renderTable();
+}
+
+function setPeriod(p){
+  period=p;
+  document.querySelectorAll('.filter-group button[data-period]').forEach(b=>{
+    b.classList.toggle('pf-active',b.dataset.period===p);
+  });
+  renderTable();
+}
+
+function setLoc(l){
+  loc=l;
+  document.querySelectorAll('.filter-group button[data-loc]').forEach(b=>{
+    b.className=b.className.replace(/active-\S+/g,'').trim();
+    if(b.dataset.loc===l){
+      const map={'all':'active-all','buda':'active-buda','leander':'active-leander','marble falls':'active-marble','lakeline':'active-lakeline','clarkston':'active-clarkston'};
+      b.classList.add(map[l]||'active-all');
+    }
+  });
+  renderTable();
+}
+
+// Init
+makePie('pie1',PIE_DATA_1);
+makePie('pie2',PIE_DATA_2);
+makePie('pie3',PIE_DATA_3);
+renderTable();
+</script>
+</body>
+</html>
