@@ -40,8 +40,10 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:0
 .kpi:last-child{border-right:none;}
 .kpi-lbl{font-size:10px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted);font-family:"DM Mono",monospace;}
 .kpi-val{font-size:22px;font-weight:800;line-height:1;color:#fff;}
-.kpi-val.blue{color:#60a5fa;}.kpi-val.green{color:#4ade80;}.kpi-val.red{color:#f87171;}
-.kpi-val.yellow{color:#fbbf24;font-size:15px;}.kpi-val.teal{color:#2dd4bf;}
+.kpi-val.blue{color:#60a5fa;}
+.kpi-val.yellow{color:#fbbf24;font-size:15px;}
+.kpi-val.teal{color:#2dd4bf;}
+.kpi-val.red{color:#f87171;}
 .main{flex:1;padding:24px;display:flex;flex-direction:column;gap:20px;overflow-y:auto;}
 .section-divider{display:flex;align-items:center;gap:16px;}
 .section-label{font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#fff;font-family:"DM Mono",monospace;white-space:nowrap;}
@@ -125,8 +127,7 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:0
 </header>
 
 <div class="kpi-bar">
-  <div class="kpi"><div class="kpi-lbl">Total Appointments</div><div class="kpi-val blue" id="k-total">-</div></div>
-  <div class="kpi"><div class="kpi-lbl">Show Rate</div><div class="kpi-val green" id="k-show">-</div></div>
+  <div class="kpi"><div class="kpi-lbl">Showed Appointments</div><div class="kpi-val blue" id="k-showed">-</div></div>
   <div class="kpi"><div class="kpi-lbl">Top Source</div><div class="kpi-val yellow" id="k-topsource">-</div></div>
   <div class="kpi"><div class="kpi-lbl">Started</div><div class="kpi-val teal" id="k-started">-</div></div>
 </div>
@@ -285,14 +286,13 @@ function renderAll(base){
   const total=base.length;
   document.getElementById('all-count').textContent=total+' records';
 
-  const shows=base.filter(p=>statusKey(p.status)==='started').length;
+  const showed=base.filter(p=>statusKey(p.status)==='started').length;
   const started=base.filter(p=>statusKey(p.status)==='started').length;
   const srcCount={};
   base.forEach(p=>{if(p.source)srcCount[p.source]=(srcCount[p.source]||0)+1;});
   const topSrc=Object.entries(srcCount).sort((a,b)=>b[1]-a[1])[0];
 
-  document.getElementById('k-total').textContent=total;
-  document.getElementById('k-show').textContent=total>0?Math.round(shows/total*100)+'%':'-';
+  document.getElementById('k-showed').textContent=showed;
   document.getElementById('k-topsource').textContent=topSrc?topSrc[0]:'-';
   document.getElementById('k-started').textContent=started;
 
@@ -308,7 +308,7 @@ function renderAll(base){
   tbody.innerHTML=sources.map((src,i)=>{
     const srcPts=base.filter(p=>p.source===src);
     const srcTotal=srcPts.length;
-    const showed=srcPts.filter(p=>statusKey(p.status)==='started').length;
+    const showedSrc=srcPts.filter(p=>statusKey(p.status)==='started').length;
     const noShowed=srcPts.filter(p=>statusKey(p.status)==='noshow').length;
     const startedSrc=srcPts.filter(p=>statusKey(p.status)==='started').length;
     const nsRate=srcTotal>0?Math.round(noShowed/srcTotal*100):0;
@@ -316,7 +316,7 @@ function renderAll(base){
     const color=SRC_COLORS[i%SRC_COLORS.length];
     return`<tr>
       <td class="src-name" style="color:${color}">${src}</td>
-      <td class="num-cell"><span class="num-showed">${showed}</span></td>
+      <td class="num-cell"><span class="num-showed">${showedSrc}</span></td>
       <td class="num-cell"><span class="num-noshow">${noShowed}</span></td>
       <td class="num-cell"><span class="num-started">${startedSrc}</span></td>
       <td class="num-cell" style="color:#fff;font-weight:700">${srcTotal}</td>
