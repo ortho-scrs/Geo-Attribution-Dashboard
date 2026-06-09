@@ -397,7 +397,7 @@ async function load(){
     all=parsed.data.map(row=>{
       const v=Object.values(row);
       return{name:v[0]||'',source:v[1]||'',status:v[2]||'',loc:v[3]||'',date:v[4]||'',monthYear:v[5]||''};
-    }).filter(p=>p.name&&p.source&&p.source.trim()!=='');
+    }).filter(p=>p.name);
     document.getElementById('overlay').style.display='none';
     update();
   }catch(e){
