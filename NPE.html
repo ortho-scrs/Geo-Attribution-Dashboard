@@ -224,6 +224,22 @@ const SRC_COLORS=['#0ea5e9','#a855f7','#22c55e','#f59e0b','#ef4444','#ec4899','#
 let all=[],period='annual',loc='Clarkston';
 let allPieChart=null,nsPieChart=null;
 
+function parseDate(str){
+  if(!str)return null;
+  // Try direct parse first
+  let d=new Date(str);
+  if(!isNaN(d)&&d.getFullYear()>2000)return d;
+  // Handle short year format: MM/DD/YY or MM/DD/YY H:MM AM/PM
+  const shortYear=/^(\d{1,2})\/(\d{1,2})\/(\d{2})(.*)/;
+  const m=str.match(shortYear);
+  if(m){
+    const fixed=`${m[1]}/${m[2]}/20${m[3]}${m[4]}`;
+    d=new Date(fixed);
+    if(!isNaN(d))return d;
+  }
+  return null;
+}
+
 function statusKey(s){
   if(!s)return'showed';
   const v=s.toLowerCase();
@@ -235,13 +251,15 @@ function filterByPeriod(pts){
   const now=new Date();
   const lm=new Date(now.getFullYear(),now.getMonth()-1,1);
   return pts.filter(p=>{
-    let d=new Date(p.date);
-    // Handle short year format like "01/09/26 3:00 PM"
-    if(isNaN(d)&&p.date){
-      const fixed=p.date.replace(/(\d{1,2}\/\d{1,2}\/)(\d{2})/,'$120$2');
-      d=new Date(fixed);
-    }
-    if(isNaN(d))return true;
+    const d=parseDate(p.date);
+    if(!d)return true;
+    if(period==='lastmonth')return d.getFullYear()===lm.getFullYear()&&d.getMonth()===lm.getMonth();
+    if(period==='q1')return d.getFullYear()===now.getFullYear()&&d.getMonth()<=2;
+    if(period==='q2')return d.getFullYear()===now.getFullYear()&&d.getMonth()>=3&&d.getMonth()<=5;
+    if(period==='q3')return d.getFullYear()===now.getFullYear()&&d.getMonth()>=6&&d.getMonth()<=8;
+    if(period==='q4')return d.getFullYear()===now.getFullYear()&&d.getMonth()>=9;
+    if(period==='annual')return d.getFullYear()===now.getFullYear();
+    return true;
   });
 }
 
