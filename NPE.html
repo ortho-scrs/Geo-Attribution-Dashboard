@@ -310,7 +310,11 @@ function renderAll(base){
   const colors=srcData.map((_,i)=>SRC_COLORS[i%SRC_COLORS.length]);
   allPieChart=makePie('allPie','all-pie-legend',srcData,colors,total,allPieChart);
 
-  const sources=Object.keys(srcCount).filter(s=>srcCount[s]>2).sort((a,b)=>srcCount[b]-srcCount[a]);
+  const sources=Object.keys(srcCount).filter(s=>srcCount[s]>2).sort((a,b)=>{
+    const rateA=base.filter(p=>p.source===a&&statusKey(p.status)==='noshow').length/(srcCount[a]||1);
+    const rateB=base.filter(p=>p.source===b&&statusKey(p.status)==='noshow').length/(srcCount[b]||1);
+    return rateB-rateA;
+  });
   const maxTotal=Math.max(...sources.map(s=>srcCount[s]),1);
   const tbody=document.getElementById('src-breakdown-body');
   if(!sources.length){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:20px">No data</td></tr>';return;}
