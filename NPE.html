@@ -225,14 +225,10 @@ let all=[],period='annual',loc='Clarkston';
 let allPieChart=null,nsPieChart=null;
 
 function statusKey(s){
-  if(!s)return'unknown';
+  if(!s)return'showed';
   const v=s.toLowerCase();
-  if(v.includes('started'))return'started';
   if(v.includes('no-show')||v.includes('noshow')||v.includes('no show'))return'noshow';
-  if(v.includes('cancelled')||v.includes('canceled'))return'cancelled';
-  if(v.includes('uncommitted'))return'uncommitted';
-  if(v.includes('obs'))return'obs';
-  return'unknown';
+  return'showed';
 }
 
 function filterByPeriod(pts){
@@ -283,7 +279,7 @@ function renderAll(base){
   const total=base.length;
   document.getElementById('all-count').textContent=total+' records';
 
-  const showed=base.filter(p=>statusKey(p.status)==='started').length;
+  const showed=base.filter(p=>statusKey(p.status)==='showed').length;
   const noshows=base.filter(p=>statusKey(p.status)==='noshow').length;
 
   const srcCount={};
@@ -306,7 +302,7 @@ function renderAll(base){
   tbody.innerHTML=sources.map((src,i)=>{
     const srcPts=base.filter(p=>p.source===src);
     const srcTotal=srcPts.length;
-    const showedSrc=srcPts.filter(p=>statusKey(p.status)==='started').length;
+    const showedSrc=srcPts.filter(p=>statusKey(p.status)==='showed').length;
     const noShowed=srcPts.filter(p=>statusKey(p.status)==='noshow').length;
     const nsRate=srcTotal>0?Math.round(noShowed/srcTotal*100):0;
     const barW=Math.round(srcTotal/maxTotal*100);
