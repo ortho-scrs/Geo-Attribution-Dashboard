@@ -300,7 +300,11 @@ function renderAll(base){
 
   const srcCount={};
   base.forEach(p=>{if(p.source)srcCount[p.source]=(srcCount[p.source]||0)+1;});
-  const topSrc=Object.entries(srcCount).sort((a,b)=>b[1]-a[1])[0];
+  const topSrc=Object.entries(srcCount).filter(([s])=>srcCount[s]>2).sort((a,b)=>{
+    const rateA=base.filter(p=>p.source===a[0]&&statusKey(p.status)==='noshow').length/(a[1]||1);
+    const rateB=base.filter(p=>p.source===b[0]&&statusKey(p.status)==='noshow').length/(b[1]||1);
+    return rateB-rateA;
+  })[0];
 
   document.getElementById('k-showed').textContent=showed;
   document.getElementById('k-topsource').textContent=topSrc?topSrc[0]:'-';
