@@ -32,10 +32,11 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:0
 .section-label{font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#fff;font-family:"DM Mono",monospace;white-space:nowrap;}
 .section-line{flex:1;height:1px;background:var(--border);}
 
-/* FUNNEL STATS LAYOUT */
-.funnel-stats{display:flex;flex-direction:column;gap:12px;align-items:center;}
-.funnel-top{display:flex;justify-content:center;}
-.funnel-bottom{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;width:100%;}
+/* FUNNEL LAYOUT */
+.funnel-layout{display:grid;grid-template-columns:1fr 400px;gap:16px;align-items:start;}
+.funnel-stats{display:flex;flex-direction:column;gap:12px;}
+.funnel-top{width:100%;}
+.funnel-bottom{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
 .funnel-pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 
 /* FUNNEL CARDS */
@@ -48,7 +49,6 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:0
 .funnel-card.noshow-pct::before{background:#f87171;}
 .funnel-card.started::before{background:#c084fc;}
 .funnel-card.close-pct::before{background:#f472b6;}
-.funnel-card.leads{min-width:320px;}
 .funnel-lbl{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);font-family:"DM Mono",monospace;}
 .funnel-val{font-size:36px;font-weight:800;line-height:1;color:#fff;}
 .funnel-val.blue{color:#60a5fa;}
@@ -69,10 +69,10 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:0
 .funnel-stages{display:flex;flex-direction:column;gap:6px;padding:20px 24px;}
 .funnel-stage{display:flex;align-items:center;gap:16px;}
 .funnel-stage-bar-wrap{flex:1;height:44px;display:flex;align-items:center;}
-.funnel-stage-bar{height:100%;border-radius:6px;display:flex;align-items:center;padding:0 14px;min-width:80px;}
+.funnel-stage-bar{height:100%;border-radius:6px;display:flex;align-items:center;padding:0 14px;min-width:60px;}
 .funnel-stage-lbl{font-size:12px;font-weight:700;font-family:"DM Mono",monospace;white-space:nowrap;}
-.funnel-stage-count{font-size:14px;font-weight:800;min-width:50px;text-align:right;font-family:"DM Mono",monospace;}
-.funnel-stage-pct{font-size:11px;color:var(--text-muted);min-width:45px;text-align:right;font-family:"DM Mono",monospace;}
+.funnel-stage-count{font-size:14px;font-weight:800;min-width:40px;text-align:right;font-family:"DM Mono",monospace;}
+.funnel-stage-pct{font-size:11px;color:var(--text-muted);min-width:40px;text-align:right;font-family:"DM Mono",monospace;}
 .drop-badge{font-size:10px;font-weight:800;padding:2px 7px;border-radius:4px;font-family:"DM Mono",monospace;}
 .drop-good{background:rgba(34,197,94,.18);color:#4ade80;}
 .drop-mid{background:rgba(245,158,11,.18);color:#fbbf24;}
@@ -125,63 +125,8 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:0
     <div class="section-line"></div>
   </div>
 
-  <!-- FUNNEL STATS -->
-  <div class="funnel-stats">
+  <div class="funnel-layout">
 
-    <!-- TOP: New Leads centered -->
-    <div class="funnel-top">
-      <div class="funnel-card leads">
-        <div class="funnel-lbl">New Leads</div>
-        <div class="funnel-val blue" id="k-leads">-</div>
-        <div class="funnel-sub">Total entered pipeline</div>
-      </div>
-    </div>
-
-    <!-- BOTTOM: 3 pairs -->
-    <div class="funnel-bottom">
-      <!-- Pair 1: Booked + Booking % -->
-      <div class="funnel-pair">
-        <div class="funnel-card booked">
-          <div class="funnel-lbl">Booked</div>
-          <div class="funnel-val green" id="k-booked">-</div>
-          <div class="funnel-sub">Appt scheduled</div>
-        </div>
-        <div class="funnel-card booking-pct">
-          <div class="funnel-lbl">Booking %</div>
-          <div class="funnel-val lime" id="k-booking-pct">-</div>
-          <div class="funnel-sub">Booked / Leads</div>
-        </div>
-      </div>
-      <!-- Pair 2: Showed + No-Show Rate -->
-      <div class="funnel-pair">
-        <div class="funnel-card showed">
-          <div class="funnel-lbl">Showed</div>
-          <div class="funnel-val teal" id="k-showed">-</div>
-          <div class="funnel-sub">Booked − No-Shows</div>
-        </div>
-        <div class="funnel-card noshow-pct">
-          <div class="funnel-lbl">No-Show Rate</div>
-          <div class="funnel-val red" id="k-noshow-pct">-</div>
-          <div class="funnel-sub">No-Shows / Booked</div>
-        </div>
-      </div>
-      <!-- Pair 3: Started + Close Rate -->
-      <div class="funnel-pair">
-        <div class="funnel-card started">
-          <div class="funnel-lbl">Started</div>
-          <div class="funnel-val purple" id="k-started">-</div>
-          <div class="funnel-sub">Treatment started</div>
-        </div>
-        <div class="funnel-card close-pct">
-          <div class="funnel-lbl">Close Rate</div>
-          <div class="funnel-val pink" id="k-close-pct">-</div>
-          <div class="funnel-sub">Started / Showed</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div style="display:grid;grid-template-columns:1fr 400px;gap:16px;align-items:start;">
     <!-- LEFT: KPI STATS -->
     <div class="funnel-stats">
       <div class="funnel-top">
@@ -242,12 +187,7 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:0
         <div class="chart-wrap"><canvas id="funnelChart"></canvas></div>
       </div>
     </div>
-  </div>
 
-  <!-- STAGE COUNTS CHART -->
-  <div class="card">
-    <div class="card-head"><span>Stage Counts</span></div>
-    <div class="chart-wrap"><canvas id="funnelChart"></canvas></div>
   </div>
 
   <!-- PICKUP RATE -->
@@ -470,7 +410,7 @@ async function load(){
         month:v[1]||'',
         callsMade:parseInt(v[2])||0,
         pickedUp:parseInt(v[3])||0,
-        rate:rawRate<1?Math.round(rawRate*100*100)/100:rawRate
+        rate:rawRate<1?Math.round(rawRate*10000)/100:rawRate
       };
     }).filter(p=>p.date&&p.callsMade>0);
 
