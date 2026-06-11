@@ -31,16 +31,12 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:0
 .section-divider{display:flex;align-items:center;gap:16px;}
 .section-label{font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#fff;font-family:"DM Mono",monospace;white-space:nowrap;}
 .section-line{flex:1;height:1px;background:var(--border);}
-
-/* FUNNEL LAYOUT */
 .funnel-layout{display:grid;grid-template-columns:1fr 400px;gap:16px;align-items:start;}
 .funnel-left{display:flex;flex-direction:column;gap:12px;}
 .funnel-stats{display:flex;flex-direction:column;gap:12px;}
 .funnel-top{width:100%;}
 .funnel-bottom{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
 .funnel-pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-
-/* FUNNEL CARDS */
 .funnel-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 24px;display:flex;flex-direction:column;gap:8px;position:relative;overflow:hidden;}
 .funnel-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
 .funnel-card.leads::before{background:#60a5fa;}
@@ -60,13 +56,9 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:0
 .funnel-val.purple{color:#c084fc;}
 .funnel-val.pink{color:#f472b6;}
 .funnel-sub{font-size:11px;color:var(--text-muted);font-family:"DM Mono",monospace;}
-
-/* CARDS */
 .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;}
 .card-head{padding:14px 20px;border-bottom:1px solid var(--border);font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#fff;font-family:"DM Mono",monospace;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;}
 .chart-wrap{padding:20px 24px;height:280px;position:relative;}
-
-/* FUNNEL VISUAL */
 .funnel-stages{display:flex;flex-direction:column;gap:6px;padding:20px 24px;}
 .funnel-stage{display:flex;align-items:center;gap:16px;}
 .funnel-stage-bar-wrap{flex:1;height:44px;display:flex;align-items:center;}
@@ -78,13 +70,11 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:0
 .drop-good{background:rgba(34,197,94,.18);color:#4ade80;}
 .drop-mid{background:rgba(245,158,11,.18);color:#fbbf24;}
 .drop-bad{background:rgba(239,68,68,.18);color:#f87171;}
-
-/* PICKUP */
 .pickup-kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:0;padding:20px 24px 16px;}
 .pickup-kpi{display:flex;flex-direction:column;gap:4px;padding-right:24px;margin-right:24px;border-right:1px solid var(--border);}
 .pickup-kpi:last-child{border-right:none;margin-right:0;padding-right:0;}
 .pickup-kpi-lbl{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);font-family:"DM Mono",monospace;}
-.pickup-kpi-val{font-size:26px;font-weight:800;color:#fff;}
+.pickup-kpi-val{font-size:26px;font-weight:800;}
 .pickup-kpi-val.blue{color:#60a5fa;}
 .pickup-kpi-val.green{color:#4ade80;}
 .pickup-kpi-val.yellow{color:#fbbf24;}
@@ -93,7 +83,6 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:0
 .mini-filter button:last-child{border-right:none;}
 .mini-filter button:hover:not(.mf-active){background:var(--surface2);color:#fff;}
 .mf-active{background:#0ea5e9!important;color:#fff!important;}
-
 #overlay{position:fixed;inset:0;background:rgba(8,12,20,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;gap:20px;}
 .spin{width:48px;height:48px;border:3px solid var(--border);border-top-color:#0ea5e9;border-radius:50%;animation:spin .8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
@@ -128,10 +117,8 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:0
 
   <div class="funnel-layout">
 
-    <!-- LEFT COLUMN: KPI STATS + PICKUP RATE -->
+    <!-- LEFT: KPI STATS + PICKUP -->
     <div class="funnel-left">
-
-      <!-- KPI STATS -->
       <div class="funnel-stats">
         <div class="funnel-top">
           <div class="funnel-card leads" style="width:100%;">
@@ -206,10 +193,9 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:0
         </div>
         <div class="chart-wrap"><canvas id="pickupChart"></canvas></div>
       </div>
-
     </div>
 
-    <!-- RIGHT COLUMN: FUNNEL VISUAL + STAGE COUNTS -->
+    <!-- RIGHT: FUNNEL VISUAL + STAGE COUNTS -->
     <div style="display:flex;flex-direction:column;gap:16px;">
       <div class="card">
         <div class="card-head"><span>Funnel Visualization</span></div>
@@ -222,7 +208,6 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:0
     </div>
 
   </div>
-
 </div>
 
 <script>
@@ -241,4 +226,188 @@ function parseDate(str){
   return null;
 }
 
-functio
+function filterFunnelByPeriod(pts){
+  const now=new Date();
+  const lm=new Date(now.getFullYear(),now.getMonth()-1,1);
+  return pts.filter(p=>{
+    const d=parseDate(p.created);
+    if(!d)return true;
+    if(period==='lastmonth')return d.getFullYear()===lm.getFullYear()&&d.getMonth()===lm.getMonth();
+    if(period==='q1')return d.getFullYear()===now.getFullYear()&&d.getMonth()<=2;
+    if(period==='q2')return d.getFullYear()===now.getFullYear()&&d.getMonth()>=3&&d.getMonth()<=5;
+    if(period==='q3')return d.getFullYear()===now.getFullYear()&&d.getMonth()>=6&&d.getMonth()<=8;
+    if(period==='q4')return d.getFullYear()===now.getFullYear()&&d.getMonth()>=9;
+    if(period==='annual')return d.getFullYear()===now.getFullYear();
+    return true;
+  });
+}
+
+function filterPickupByPeriod(pts){
+  const now=new Date();
+  now.setHours(23,59,59,999);
+  return pts.filter(p=>{
+    const d=parseDate(p.date);
+    if(!d)return false;
+    if(pickupPeriod==='lastweek'){const c=new Date(now);c.setDate(c.getDate()-7);return d>=c&&d<=now;}
+    if(pickupPeriod==='lastmonth'){const c=new Date(now);c.setDate(c.getDate()-30);return d>=c&&d<=now;}
+    if(pickupPeriod==='last90'){const c=new Date(now);c.setDate(c.getDate()-90);return d>=c&&d<=now;}
+    return true;
+  });
+}
+
+function pct(a,b){return b>0?Math.round(a/b*100):0;}
+function dropClass(r){return r>=60?'drop-good':r>=40?'drop-mid':'drop-bad';}
+
+function renderFunnel(){
+  const base=filterFunnelByPeriod(funnelData);
+  const leads=base.reduce((s,p)=>s+p.newLead,0);
+  const booked=base.reduce((s,p)=>s+p.booked,0);
+  const noshow=base.reduce((s,p)=>s+p.noshow,0);
+  const started=base.reduce((s,p)=>s+p.started,0);
+  const showed=booked-noshow;
+  const bookingPct=pct(booked,leads);
+  const showPct=pct(showed,booked);
+  const closePct=pct(started,showed);
+
+  document.getElementById('k-leads').textContent=leads;
+  document.getElementById('k-booked').textContent=booked;
+  document.getElementById('k-booking-pct').textContent=bookingPct+'%';
+  document.getElementById('k-showed').textContent=showed;
+  document.getElementById('k-show-pct').textContent=showPct+'%';
+  document.getElementById('k-started').textContent=started;
+  document.getElementById('k-close-pct').textContent=closePct+'%';
+
+  const stages=[
+    {label:'New Leads',count:leads,color:'#60a5fa'},
+    {label:'Booked',count:booked,color:'#4ade80'},
+    {label:'Showed',count:showed,color:'#34d399'},
+    {label:'Started',count:started,color:'#c084fc'},
+  ];
+
+  const funnelEl=document.getElementById('funnel-stages');
+  funnelEl.innerHTML=stages.map((s,i)=>{
+    const dropPct=i>0?pct(s.count,stages[i-1].count):100;
+    const widthPct=leads>0?Math.max(pct(s.count,leads),4):4;
+    const arrow=i>0?`<div style="display:flex;align-items:center;gap:8px;padding:4px 0;color:var(--text-muted);font-size:12px;">↓ <span class="drop-badge ${dropClass(dropPct)}">${dropPct}% conversion</span></div>`:'';
+    return`${arrow}
+    <div class="funnel-stage">
+      <div class="funnel-stage-bar-wrap">
+        <div class="funnel-stage-bar" style="width:${widthPct}%;background:${s.color}22;border:1px solid ${s.color}55">
+          <span class="funnel-stage-lbl" style="color:${s.color}">${s.label}</span>
+        </div>
+      </div>
+      <div class="funnel-stage-count" style="color:${s.color}">${s.count}</div>
+      <div class="funnel-stage-pct">${pct(s.count,leads)}%</div>
+    </div>`;
+  }).join('');
+
+  if(funnelChart)funnelChart.destroy();
+  const ctx=document.getElementById('funnelChart').getContext('2d');
+  funnelChart=new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels:['New Leads','Booked','Showed','Started'],
+      datasets:[{
+        data:[leads,booked,showed,started],
+        backgroundColor:['#60a5fa33','#4ade8033','#34d39933','#c084fc33'],
+        borderColor:['#60a5fa','#4ade80','#34d399','#c084fc'],
+        borderWidth:2,borderRadius:6
+      }]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{backgroundColor:'#151e2e',borderColor:'#1e2d42',borderWidth:1,titleColor:'#fff',bodyColor:'#94a3b8'}},
+      scales:{x:{grid:{color:'#1e2d42'},ticks:{color:'#cbd5e1',font:{family:'DM Mono',size:12}}},
+        y:{grid:{color:'#1e2d42'},ticks:{color:'#cbd5e1',font:{family:'DM Mono',size:11},stepSize:1},beginAtZero:true}}}
+  });
+}
+
+function renderPickup(){
+  const base=filterPickupByPeriod(pickupData);
+  const totalCalls=base.reduce((s,p)=>s+p.callsMade,0);
+  const totalPicked=base.reduce((s,p)=>s+p.pickedUp,0);
+  const avgRate=totalCalls>0?Math.round(totalPicked/totalCalls*100):0;
+
+  document.getElementById('p-calls').textContent=totalCalls;
+  document.getElementById('p-picked').textContent=totalPicked;
+  document.getElementById('p-rate').textContent=avgRate+'%';
+
+  const sorted=[...base].sort((a,b)=>new Date(a.date)-new Date(b.date));
+
+  if(pickupChart)pickupChart.destroy();
+  const ctx=document.getElementById('pickupChart').getContext('2d');
+  pickupChart=new Chart(ctx,{
+    type:'line',
+    data:{
+      labels:sorted.map(p=>{const d=parseDate(p.date);return d?d.toLocaleDateString('en-US',{month:'short',day:'numeric'}):p.date;}),
+      datasets:[
+        {label:'Pickup Rate %',data:sorted.map(p=>p.rate),borderColor:'#fbbf24',backgroundColor:'#fbbf2422',borderWidth:2,pointRadius:3,tension:.3,fill:true},
+        {label:'Calls Made',data:sorted.map(p=>p.callsMade),borderColor:'#60a5fa',backgroundColor:'transparent',borderWidth:2,pointRadius:2,tension:.3,yAxisID:'y2'}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:true,labels:{color:'#94a3b8',font:{family:'DM Mono',size:11},boxWidth:12}},
+        tooltip:{backgroundColor:'#151e2e',borderColor:'#1e2d42',borderWidth:1,titleColor:'#fff',bodyColor:'#94a3b8'}},
+      scales:{
+        x:{grid:{color:'#1e2d42'},ticks:{color:'#94a3b8',font:{family:'DM Mono',size:10},maxRotation:45,maxTicksLimit:15}},
+        y:{grid:{color:'#1e2d42'},ticks:{color:'#cbd5e1',font:{family:'DM Mono',size:10},callback:v=>v+'%'},beginAtZero:true,max:100},
+        y2:{position:'right',grid:{display:false},ticks:{color:'#60a5fa',font:{family:'DM Mono',size:10}}}
+      }}
+  });
+}
+
+function update(){renderFunnel();renderPickup();}
+
+function setPeriod(p){
+  period=p;
+  document.querySelectorAll('.period-filter button').forEach(b=>b.classList.toggle('pf-active',b.dataset.period===p));
+  renderFunnel();
+}
+
+function setPickupPeriod(p){
+  pickupPeriod=p;
+  document.querySelectorAll('.mini-filter button').forEach(b=>b.classList.toggle('mf-active',b.dataset.pickup===p));
+  renderPickup();
+}
+
+async function load(){
+  try{
+    const [fRes,pRes]=await Promise.all([fetch(FUNNEL_CSV),fetch(PICKUP_CSV)]);
+    const [fTxt,pTxt]=await Promise.all([fRes.text(),pRes.text()]);
+
+    const fParsed=Papa.parse(fTxt,{header:false,skipEmptyLines:true});
+    funnelData=fParsed.data.slice(1).map(row=>{
+      return{
+        contactId:(row[0]||'').trim(),
+        newLead:parseInt(row[1])||0,
+        booked:parseInt(row[2])||0,
+        noshow:parseInt(row[3])||0,
+        started:parseInt(row[4])||0,
+        created:row[5]||''
+      };
+    }).filter(p=>p.contactId);
+
+    const pParsed=Papa.parse(pTxt,{header:false,skipEmptyLines:true});
+    pickupData=pParsed.data.slice(1).map(row=>{
+      const rawRate=parseFloat(String(row[4]||'').replace('%',''))||0;
+      return{
+        date:row[0]||'',
+        month:row[1]||'',
+        callsMade:parseInt(row[2])||0,
+        pickedUp:parseInt(row[3])||0,
+        rate:rawRate<1?Math.round(rawRate*10000)/100:rawRate
+      };
+    }).filter(p=>p.date&&p.callsMade>0);
+
+    document.getElementById('overlay').style.display='none';
+    update();
+  }catch(e){
+    document.querySelector('.load-txt').textContent='Error loading data. Please refresh.';
+    console.error(e);
+  }
+}
+
+load();
+setInterval(load,60000);
+</script>
+</body>
+</html>
