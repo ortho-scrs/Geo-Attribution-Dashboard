@@ -28,33 +28,44 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:0
 .period-filter button:hover:not(.pf-active){background:var(--surface2);color:#fff;}
 .pf-active{background:#0ea5e9!important;color:#fff!important;}
 .main{flex:1;padding:24px;display:flex;flex-direction:column;gap:24px;overflow-y:auto;}
-.funnel-row{display:grid;grid-template-columns:repeat(7,1fr);gap:12px;}
-.funnel-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 16px;display:flex;flex-direction:column;gap:8px;position:relative;overflow:hidden;}
+.section-divider{display:flex;align-items:center;gap:16px;}
+.section-label{font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#fff;font-family:"DM Mono",monospace;white-space:nowrap;}
+.section-line{flex:1;height:1px;background:var(--border);}
+
+/* FUNNEL STATS LAYOUT */
+.funnel-stats{display:flex;flex-direction:column;gap:12px;align-items:center;}
+.funnel-top{display:flex;justify-content:center;}
+.funnel-bottom{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;width:100%;}
+.funnel-pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+/* FUNNEL CARDS */
+.funnel-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px 24px;display:flex;flex-direction:column;gap:8px;position:relative;overflow:hidden;}
 .funnel-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
 .funnel-card.leads::before{background:#60a5fa;}
 .funnel-card.booked::before{background:#4ade80;}
 .funnel-card.booking-pct::before{background:#a3e635;}
 .funnel-card.showed::before{background:#34d399;}
-.funnel-card.show-pct::before{background:#fbbf24;}
+.funnel-card.noshow-pct::before{background:#f87171;}
 .funnel-card.started::before{background:#c084fc;}
-.funnel-card.start-pct::before{background:#f472b6;}
+.funnel-card.close-pct::before{background:#f472b6;}
+.funnel-card.leads{min-width:320px;}
 .funnel-lbl{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);font-family:"DM Mono",monospace;}
-.funnel-val{font-size:32px;font-weight:800;line-height:1;color:#fff;}
+.funnel-val{font-size:36px;font-weight:800;line-height:1;color:#fff;}
 .funnel-val.blue{color:#60a5fa;}
 .funnel-val.green{color:#4ade80;}
 .funnel-val.lime{color:#a3e635;}
 .funnel-val.teal{color:#34d399;}
-.funnel-val.yellow{color:#fbbf24;}
+.funnel-val.red{color:#f87171;}
 .funnel-val.purple{color:#c084fc;}
 .funnel-val.pink{color:#f472b6;}
 .funnel-sub{font-size:11px;color:var(--text-muted);font-family:"DM Mono",monospace;}
-.section-divider{display:flex;align-items:center;gap:16px;}
-.section-label{font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#fff;font-family:"DM Mono",monospace;white-space:nowrap;}
-.section-line{flex:1;height:1px;background:var(--border);}
+
+/* CARDS */
 .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;}
 .card-head{padding:14px 20px;border-bottom:1px solid var(--border);font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#fff;font-family:"DM Mono",monospace;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;}
 .chart-wrap{padding:20px 24px;height:280px;position:relative;}
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+
+/* FUNNEL VISUAL */
 .funnel-stages{display:flex;flex-direction:column;gap:6px;padding:20px 24px;}
 .funnel-stage{display:flex;align-items:center;gap:16px;}
 .funnel-stage-bar-wrap{flex:1;height:44px;display:flex;align-items:center;}
@@ -66,7 +77,9 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:0
 .drop-good{background:rgba(34,197,94,.18);color:#4ade80;}
 .drop-mid{background:rgba(245,158,11,.18);color:#fbbf24;}
 .drop-bad{background:rgba(239,68,68,.18);color:#f87171;}
-.pickup-kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:0;padding:20px 24px 16px;}
+
+/* PICKUP */
+.pickup-kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:0;padding:20px 24px 16px;}
 .pickup-kpi{display:flex;flex-direction:column;gap:4px;padding-right:24px;margin-right:24px;border-right:1px solid var(--border);}
 .pickup-kpi:last-child{border-right:none;margin-right:0;padding-right:0;}
 .pickup-kpi-lbl{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);font-family:"DM Mono",monospace;}
@@ -79,18 +92,7 @@ header{background:var(--surface);border-bottom:1px solid var(--border);padding:0
 .mini-filter button:last-child{border-right:none;}
 .mini-filter button:hover:not(.mf-active){background:var(--surface2);color:#fff;}
 .mf-active{background:#0ea5e9!important;color:#fff!important;}
-.tbl-wrap{overflow-x:auto;}
-table{width:100%;border-collapse:collapse;font-size:12px;}
-thead th{padding:10px 16px;text-align:left;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#fff;font-family:"DM Mono",monospace;background:var(--surface2);white-space:nowrap;border-bottom:1px solid var(--border);}
-thead th.num{text-align:center;}
-tbody td{padding:10px 16px;border-bottom:1px solid var(--border);font-family:"DM Mono",monospace;color:var(--text-dim);white-space:nowrap;}
-tbody tr:last-child td{border-bottom:none;}
-tbody tr:hover td{background:var(--surface2);}
-.num-cell{text-align:center;}
-.rate-badge{display:inline-block;padding:3px 8px;border-radius:4px;font-size:10px;font-weight:800;}
-.rate-low{background:rgba(239,68,68,.18);color:#f87171;}
-.rate-mid{background:rgba(245,158,11,.18);color:#fbbf24;}
-.rate-good{background:rgba(34,197,94,.18);color:#4ade80;}
+
 #overlay{position:fixed;inset:0;background:rgba(8,12,20,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;gap:20px;}
 .spin{width:48px;height:48px;border:3px solid var(--border);border-top-color:#0ea5e9;border-radius:50%;animation:spin .8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
@@ -123,55 +125,75 @@ tbody tr:hover td{background:var(--surface2);}
     <div class="section-line"></div>
   </div>
 
-  <div class="funnel-row">
-    <div class="funnel-card leads">
-      <div class="funnel-lbl">New Leads</div>
-      <div class="funnel-val blue" id="k-leads">-</div>
-      <div class="funnel-sub">Sum of col B</div>
+  <!-- FUNNEL STATS -->
+  <div class="funnel-stats">
+
+    <!-- TOP: New Leads centered -->
+    <div class="funnel-top">
+      <div class="funnel-card leads">
+        <div class="funnel-lbl">New Leads</div>
+        <div class="funnel-val blue" id="k-leads">-</div>
+        <div class="funnel-sub">Total entered pipeline</div>
+      </div>
     </div>
-    <div class="funnel-card booked">
-      <div class="funnel-lbl">Booked</div>
-      <div class="funnel-val green" id="k-booked">-</div>
-      <div class="funnel-sub">Sum of col C</div>
-    </div>
-    <div class="funnel-card booking-pct">
-      <div class="funnel-lbl">Booking %</div>
-      <div class="funnel-val lime" id="k-booking-pct">-</div>
-      <div class="funnel-sub">Booked / Leads</div>
-    </div>
-    <div class="funnel-card showed">
-      <div class="funnel-lbl">Showed</div>
-      <div class="funnel-val teal" id="k-showed">-</div>
-      <div class="funnel-sub">Booked − No-Shows</div>
-    </div>
-    <div class="funnel-card show-pct">
-      <div class="funnel-lbl">Show Up %</div>
-      <div class="funnel-val yellow" id="k-show-pct">-</div>
-      <div class="funnel-sub">Showed / Booked</div>
-    </div>
-    <div class="funnel-card started">
-      <div class="funnel-lbl">Started</div>
-      <div class="funnel-val purple" id="k-started">-</div>
-      <div class="funnel-sub">Sum of col E</div>
-    </div>
-    <div class="funnel-card start-pct">
-      <div class="funnel-lbl">Start %</div>
-      <div class="funnel-val pink" id="k-start-pct">-</div>
-      <div class="funnel-sub">Started / Showed</div>
+
+    <!-- BOTTOM: 3 pairs -->
+    <div class="funnel-bottom">
+      <!-- Pair 1: Booked + Booking % -->
+      <div class="funnel-pair">
+        <div class="funnel-card booked">
+          <div class="funnel-lbl">Booked</div>
+          <div class="funnel-val green" id="k-booked">-</div>
+          <div class="funnel-sub">Appt scheduled</div>
+        </div>
+        <div class="funnel-card booking-pct">
+          <div class="funnel-lbl">Booking %</div>
+          <div class="funnel-val lime" id="k-booking-pct">-</div>
+          <div class="funnel-sub">Booked / Leads</div>
+        </div>
+      </div>
+      <!-- Pair 2: Showed + No-Show Rate -->
+      <div class="funnel-pair">
+        <div class="funnel-card showed">
+          <div class="funnel-lbl">Showed</div>
+          <div class="funnel-val teal" id="k-showed">-</div>
+          <div class="funnel-sub">Booked − No-Shows</div>
+        </div>
+        <div class="funnel-card noshow-pct">
+          <div class="funnel-lbl">No-Show Rate</div>
+          <div class="funnel-val red" id="k-noshow-pct">-</div>
+          <div class="funnel-sub">No-Shows / Booked</div>
+        </div>
+      </div>
+      <!-- Pair 3: Started + Close Rate -->
+      <div class="funnel-pair">
+        <div class="funnel-card started">
+          <div class="funnel-lbl">Started</div>
+          <div class="funnel-val purple" id="k-started">-</div>
+          <div class="funnel-sub">Treatment started</div>
+        </div>
+        <div class="funnel-card close-pct">
+          <div class="funnel-lbl">Close Rate</div>
+          <div class="funnel-val pink" id="k-close-pct">-</div>
+          <div class="funnel-sub">Started / Showed</div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="two-col">
-    <div class="card">
-      <div class="card-head"><span>Funnel Visualization</span></div>
-      <div class="funnel-stages" id="funnel-stages"></div>
-    </div>
-    <div class="card">
-      <div class="card-head"><span>Stage Counts</span></div>
-      <div class="chart-wrap"><canvas id="funnelChart"></canvas></div>
-    </div>
+  <!-- FUNNEL VISUALIZATION -->
+  <div class="card">
+    <div class="card-head"><span>Funnel Visualization</span></div>
+    <div class="funnel-stages" id="funnel-stages"></div>
   </div>
 
+  <!-- STAGE COUNTS CHART -->
+  <div class="card">
+    <div class="card-head"><span>Stage Counts</span></div>
+    <div class="chart-wrap"><canvas id="funnelChart"></canvas></div>
+  </div>
+
+  <!-- PICKUP RATE -->
   <div class="section-divider">
     <div class="section-label">📞 Call Pickup Rate</div>
     <div class="section-line"></div>
@@ -199,33 +221,8 @@ tbody tr:hover td{background:var(--surface2);}
         <div class="pickup-kpi-lbl">Avg Pickup Rate</div>
         <div class="pickup-kpi-val yellow" id="p-rate">-</div>
       </div>
-      <div class="pickup-kpi">
-        <div class="pickup-kpi-lbl">Best Day Rate</div>
-        <div class="pickup-kpi-val green" id="p-best">-</div>
-      </div>
     </div>
     <div class="chart-wrap"><canvas id="pickupChart"></canvas></div>
-  </div>
-
-  <div class="card">
-    <div class="card-head">
-      <span>Daily Pickup Rate Log</span>
-      <span id="pickup-count" style="color:var(--text-muted);font-size:11px;font-weight:400;text-transform:none;letter-spacing:0"></span>
-    </div>
-    <div class="tbl-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Month</th>
-            <th class="num">Calls Made</th>
-            <th class="num">Picked Up</th>
-            <th class="num">Pickup Rate</th>
-          </tr>
-        </thead>
-        <tbody id="pickup-tbody"></tbody>
-      </table>
-    </div>
   </div>
 
 </div>
@@ -268,46 +265,34 @@ function filterPickupByPeriod(pts){
   return pts.filter(p=>{
     const d=parseDate(p.date);
     if(!d)return false;
-    if(pickupPeriod==='lastweek'){
-      const cutoff=new Date(now);cutoff.setDate(cutoff.getDate()-7);
-      return d>=cutoff&&d<=now;
-    }
-    if(pickupPeriod==='lastmonth'){
-      const cutoff=new Date(now);cutoff.setDate(cutoff.getDate()-30);
-      return d>=cutoff&&d<=now;
-    }
-    if(pickupPeriod==='last90'){
-      const cutoff=new Date(now);cutoff.setDate(cutoff.getDate()-90);
-      return d>=cutoff&&d<=now;
-    }
+    if(pickupPeriod==='lastweek'){const c=new Date(now);c.setDate(c.getDate()-7);return d>=c&&d<=now;}
+    if(pickupPeriod==='lastmonth'){const c=new Date(now);c.setDate(c.getDate()-30);return d>=c&&d<=now;}
+    if(pickupPeriod==='last90'){const c=new Date(now);c.setDate(c.getDate()-90);return d>=c&&d<=now;}
     return true;
   });
 }
 
 function pct(a,b){return b>0?Math.round(a/b*100):0;}
 function dropClass(r){return r>=60?'drop-good':r>=40?'drop-mid':'drop-bad';}
-function rateClass(r){return r>=40?'rate-good':r>=20?'rate-mid':'rate-low';}
 
 function renderFunnel(){
   const base=filterFunnelByPeriod(funnelData);
-
-  // Sum columns directly
-  const leads=base.reduce((s,p)=>s+parseInt(p.newLead||0),0);
-  const booked=base.reduce((s,p)=>s+parseInt(p.booked||0),0);
-  const noshow=base.reduce((s,p)=>s+parseInt(p.noshow||0),0);
-  const started=base.reduce((s,p)=>s+parseInt(p.started||0),0);
+  const leads=base.reduce((s,p)=>s+p.newLead,0);
+  const booked=base.reduce((s,p)=>s+p.booked,0);
+  const noshow=base.reduce((s,p)=>s+p.noshow,0);
+  const started=base.reduce((s,p)=>s+p.started,0);
   const showed=booked-noshow;
   const bookingPct=pct(booked,leads);
-  const showPct=pct(showed,booked);
-  const startPct=pct(started,showed);
+  const noshowPct=pct(noshow,booked);
+  const closePct=pct(started,showed);
 
   document.getElementById('k-leads').textContent=leads;
   document.getElementById('k-booked').textContent=booked;
   document.getElementById('k-booking-pct').textContent=bookingPct+'%';
   document.getElementById('k-showed').textContent=showed;
-  document.getElementById('k-show-pct').textContent=showPct+'%';
+  document.getElementById('k-noshow-pct').textContent=noshowPct+'%';
   document.getElementById('k-started').textContent=started;
-  document.getElementById('k-start-pct').textContent=startPct+'%';
+  document.getElementById('k-close-pct').textContent=closePct+'%';
 
   const stages=[
     {label:'New Leads',count:leads,color:'#60a5fa'},
@@ -358,13 +343,10 @@ function renderPickup(){
   const totalCalls=base.reduce((s,p)=>s+p.callsMade,0);
   const totalPicked=base.reduce((s,p)=>s+p.pickedUp,0);
   const avgRate=totalCalls>0?Math.round(totalPicked/totalCalls*100):0;
-  const bestDay=base.reduce((best,p)=>p.rate>best?p.rate:best,0);
 
   document.getElementById('p-calls').textContent=totalCalls;
   document.getElementById('p-picked').textContent=totalPicked;
   document.getElementById('p-rate').textContent=avgRate+'%';
-  document.getElementById('p-best').textContent=bestDay+'%';
-  document.getElementById('pickup-count').textContent=base.length+' days';
 
   const sorted=[...base].sort((a,b)=>new Date(a.date)-new Date(b.date));
 
@@ -388,16 +370,6 @@ function renderPickup(){
         y2:{position:'right',grid:{display:false},ticks:{color:'#60a5fa',font:{family:'DM Mono',size:10}}}
       }}
   });
-
-  const tbody=document.getElementById('pickup-tbody');
-  if(!sorted.length){tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:20px">No data</td></tr>';return;}
-  tbody.innerHTML=[...sorted].reverse().map(p=>`<tr>
-    <td>${p.date}</td>
-    <td>${p.month}</td>
-    <td class="num-cell">${p.callsMade}</td>
-    <td class="num-cell">${p.pickedUp}</td>
-    <td class="num-cell"><span class="rate-badge ${rateClass(p.rate)}">${p.rate}%</span></td>
-  </tr>`).join('');
 }
 
 function update(){renderFunnel();renderPickup();}
@@ -435,12 +407,13 @@ async function load(){
     const pParsed=Papa.parse(pTxt,{header:true,skipEmptyLines:true});
     pickupData=pParsed.data.map(row=>{
       const v=Object.values(row);
+      const rawRate=parseFloat(String(v[4]).replace('%',''))||0;
       return{
         date:v[0]||'',
         month:v[1]||'',
         callsMade:parseInt(v[2])||0,
         pickedUp:parseInt(v[3])||0,
-        rate:parseFloat(String(v[4]).replace('%',''))||0
+        rate:rawRate<1?Math.round(rawRate*100*100)/100:rawRate
       };
     }).filter(p=>p.date&&p.callsMade>0);
 
