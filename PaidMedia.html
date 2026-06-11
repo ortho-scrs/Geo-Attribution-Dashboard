@@ -401,8 +401,9 @@ async function load(){
     document.getElementById('overlay').style.display='none';
     update();
   }catch(e){
-    document.querySelector('.load-txt').textContent='Error loading data. Please refresh.';
-    console.error(e);
+    document.getElementById('overlay').style.display='none';
+    console.error('Load error:',e);
+    update();
   }
 }
 
